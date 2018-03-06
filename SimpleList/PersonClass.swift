@@ -23,6 +23,8 @@ class PersonClass {
         self.imageThumb = resizeImage(image: self.image!, targetSize: CGSize(width: 1000.0, height: 1000.0))
         
         // comment for Git
+        // next comment
+        
         
     }
 
