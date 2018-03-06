@@ -23,7 +23,6 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordHintText: UITextField!
     @IBOutlet weak var viewHintButton: UIButton!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,7 +38,10 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         setupLoginScreen()
         passwordText.text = ""
         confirmPasswordText.text = ""
+        passwordHintText.text = ""
+        
         self.navigationController?.setToolbarHidden(true, animated: true)
+    
     }
     
     override func didReceiveMemoryWarning() {
@@ -75,11 +77,9 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     
     private func msgBox(title: String, text: String) {
         
-        var msgTitle: String = ""
+        var msgTitle: String = "Message"
         
-        if title.isEmpty {
-            msgTitle = "Message"
-        } else {
+        if !title.isEmpty {
             msgTitle = title
         }
     
@@ -238,23 +238,31 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         let pwHint = passwordHintText.text ?? ""
         
         if password.isEmpty {
-            // need to confirm and save password to db
-            if pw == confirmPW {
-                
-                password = pw
-                passwordHint = pwHint
-                
-                // save to db
-                if savePassword() {
-                    // password saved
-                    launch1stScreen()
-                } else {
-                    // something went wrong saving password
-                    fatalError("Error saving password")
-                }
+            
+            // pw and confirmPW cannot be empty
+            if pw.isEmpty {
+                msgBox(title: "", text: "Must enter a password to continue")
+            } else if confirmPW.isEmpty {
+                msgBox(title: "", text: "Must confirm password to continue")
             } else {
-                // passwords don't match
-                msgBox(title: "", text: "Passwords do not match!")
+                // need to confirm and save password to db
+                if pw == confirmPW {
+                    password = pw
+                    passwordHint = pwHint
+                    
+                    // save to db
+                    if savePassword() {
+                        // password saved
+                        launch1stScreen()
+                    } else {
+                        // something went wrong saving password
+                        fatalError("Error saving password")
+                    }
+                } else {
+                    // passwords don't match
+                    msgBox(title: "", text: "Passwords do not match!")
+                }
+
             }
             
         } else {
