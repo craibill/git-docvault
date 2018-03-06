@@ -14,6 +14,13 @@
 		4615E75D203DE84100618407 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4615E75C203DE84100618407 /* Assets.xcassets */; };
 		4615E760203DE84100618407 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4615E75E203DE84100618407 /* LaunchScreen.storyboard */; };
 		4615E76B203DE84200618407 /* SimpleListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E76A203DE84200618407 /* SimpleListTests.swift */; };
+		4615E77A203E213D00618407 /* PersonClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E779203E213D00618407 /* PersonClass.swift */; };
+		4615E77E203F5BF400618407 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E77D203F5BF400618407 /* ItemTableViewCell.swift */; };
+		46E46428203F605E00363278 /* ItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E46427203F605E00363278 /* ItemTableViewController.swift */; };
+		46E4642A203F67AE00363278 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E46429203F67AE00363278 /* ItemViewController.swift */; };
+		46E4642C20407BEB00363278 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4642B20407BEB00363278 /* Item.swift */; };
+		46E4642E2044D33000363278 /* ZoomImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4642D2044D32F00363278 /* ZoomImageViewController.swift */; };
+		46E464302045CE5600363278 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4642F2045CE5600363278 /* LoginScreenViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,7 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4615E74F203DE84000618407 /* SimpleList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleList.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4615E74F203DE84000618407 /* DocVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DocVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4615E752203DE84000618407 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4615E754203DE84100618407 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4615E757203DE84100618407 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -38,6 +45,13 @@
 		4615E766203DE84200618407 /* SimpleListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4615E76A203DE84200618407 /* SimpleListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListTests.swift; sourceTree = "<group>"; };
 		4615E76C203DE84200618407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4615E779203E213D00618407 /* PersonClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonClass.swift; sourceTree = "<group>"; };
+		4615E77D203F5BF400618407 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
+		46E46427203F605E00363278 /* ItemTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewController.swift; sourceTree = "<group>"; };
+		46E46429203F67AE00363278 /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		46E4642B20407BEB00363278 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		46E4642D2044D32F00363278 /* ZoomImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomImageViewController.swift; sourceTree = "<group>"; };
+		46E4642F2045CE5600363278 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +84,7 @@
 		4615E750203DE84000618407 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4615E74F203DE84000618407 /* SimpleList.app */,
+				4615E74F203DE84000618407 /* DocVault.app */,
 				4615E766203DE84200618407 /* SimpleListTests.xctest */,
 			);
 			name = Products;
@@ -81,7 +95,14 @@
 			children = (
 				4615E752203DE84000618407 /* AppDelegate.swift */,
 				4615E754203DE84100618407 /* ViewController.swift */,
+				4615E779203E213D00618407 /* PersonClass.swift */,
+				46E4642B20407BEB00363278 /* Item.swift */,
+				46E46427203F605E00363278 /* ItemTableViewController.swift */,
+				46E4642F2045CE5600363278 /* LoginScreenViewController.swift */,
+				4615E77D203F5BF400618407 /* ItemTableViewCell.swift */,
+				46E46429203F67AE00363278 /* ItemViewController.swift */,
 				4615E756203DE84100618407 /* Main.storyboard */,
+				46E4642D2044D32F00363278 /* ZoomImageViewController.swift */,
 				4615E75C203DE84100618407 /* Assets.xcassets */,
 				4615E75E203DE84100618407 /* LaunchScreen.storyboard */,
 				4615E761203DE84100618407 /* Info.plist */,
@@ -116,7 +137,7 @@
 			);
 			name = SimpleList;
 			productName = SimpleList;
-			productReference = 4615E74F203DE84000618407 /* SimpleList.app */;
+			productReference = 4615E74F203DE84000618407 /* DocVault.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4615E765203DE84200618407 /* SimpleListTests */ = {
@@ -202,8 +223,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46E4642A203F67AE00363278 /* ItemViewController.swift in Sources */,
+				4615E77A203E213D00618407 /* PersonClass.swift in Sources */,
 				4615E75B203DE84100618407 /* SimpleList.xcdatamodeld in Sources */,
+				4615E77E203F5BF400618407 /* ItemTableViewCell.swift in Sources */,
+				46E4642C20407BEB00363278 /* Item.swift in Sources */,
 				4615E755203DE84100618407 /* ViewController.swift in Sources */,
+				46E46428203F605E00363278 /* ItemTableViewController.swift in Sources */,
+				46E4642E2044D33000363278 /* ZoomImageViewController.swift in Sources */,
+				46E464302045CE5600363278 /* LoginScreenViewController.swift in Sources */,
 				4615E753203DE84000618407 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,9 +388,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KGWN94JD3D;
 				INFOPLIST_FILE = SimpleList/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.SimpleList;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.SimpleListApp;
+				PRODUCT_NAME = DocVault;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -375,9 +404,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KGWN94JD3D;
 				INFOPLIST_FILE = SimpleList/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.SimpleList;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.SimpleListApp;
+				PRODUCT_NAME = DocVault;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

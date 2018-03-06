@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D102" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FullSizeImages" representedClassName="FullSizeImages" syncable="YES" codeGenerationType="class">
+        <attribute name="full_size_image" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Items" representedClassName="Items" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="item_description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_size_image" optional="YES" attributeType="Binary" syncable="YES"/>
+    </entity>
+    <entity name="Password" representedClassName="Password" syncable="YES" codeGenerationType="class">
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="password_hint" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="FullSizeImages" positionX="-63" positionY="9" width="128" height="75"/>
+        <element name="Items" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="Password" positionX="-63" positionY="9" width="128" height="75"/>
+    </elements>
 </model>

@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Requires use of photo library to select photos of documents</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Adds photos to photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Requires use of camera to take photos of documents</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
