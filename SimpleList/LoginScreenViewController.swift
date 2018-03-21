@@ -9,6 +9,12 @@
 import UIKit
 import CoreData
 
+//Keychain Configuration
+struct KeychainConfiguration {
+    static let serviceName = "DocVault"
+    static let accessGroup: String? = nil
+}
+
 class LoginScreenViewController: UIViewController, UITextFieldDelegate {
 
     var password: String = ""
@@ -22,6 +28,8 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var passwordHintText: UITextField!
     @IBOutlet weak var viewHintButton: UIButton!
+    @IBOutlet weak var labelInstructions: UILabel!
+    @IBOutlet weak var loginButtonTopConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +83,7 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
 
     //MARK: Private Functions
     
+    
     private func msgBox(title: String, text: String) {
         
         var msgTitle: String = "Message"
@@ -89,21 +98,107 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func setupLoginScreen () {
+  
+//
+// Old
+//
+//        if getPassword() {
+//            confirmPasswordText.isHidden = true
+//            passwordHintText.isHidden = true
+//            viewHintButton.isHidden = false
+//            loginButton.setTitle("Login", for: .normal)
+//        } else {
+//            confirmPasswordText.isHidden = false
+//            passwordHintText.isHidden = false
+//            viewHintButton.isHidden = true
+//            loginButton.setTitle("Confirm", for: .normal)
+//        }
         
-        if getPassword() {
-            confirmPasswordText.isHidden = true
-            passwordHintText.isHidden = true
-            viewHintButton.isHidden = false
-            loginButton.setTitle("Login", for: .normal)
-        } else {
+// New
+        password = readPasswordFromKeychain()
+        passwordHint = getPasswordHint()
+        
+        if password.isEmpty {
+            
             confirmPasswordText.isHidden = false
             passwordHintText.isHidden = false
             viewHintButton.isHidden = true
             loginButton.setTitle("Confirm", for: .normal)
+            labelInstructions.isHidden = false
+            loginButtonTopConstraint.constant = 24
+            
+        } else {
+
+            confirmPasswordText.isHidden = true
+            passwordHintText.isHidden = true
+            viewHintButton.isHidden = false
+            loginButton.setTitle("Login", for: .normal)
+            labelInstructions.isHidden = true
+            loginButtonTopConstraint.constant = -72
         }
+        
         
     }
 
+    private func savePasswordHint() -> Bool {
+
+        print("savePasswordHint(): BEGIN")
+    
+        var ret: Bool = false
+    
+        // 1
+        let managedContext = appDelegate.persistentContainer.viewContext
+    
+        // save to Items table
+        // 2
+        let entity = NSEntityDescription.entity(forEntityName: "PasswordHint", in: managedContext)!
+    
+        let thisItem = NSManagedObject(entity: entity, insertInto: managedContext)
+    
+        // 3
+        thisItem.setValue(passwordHint, forKeyPath: "password_hint")
+    
+        // 4
+        do {
+        try managedContext.save()
+        ret = true
+        } catch let error as NSError {
+        print("savePasswordHint(): Could not save. \(error), \(error.userInfo)")
+        ret = false
+        }
+    
+        print("savePasswordHint(): END")
+    
+        return ret
+
+    }
+    
+    private func savePasswordAndPasswordHint() -> Bool {
+        
+        print("savePasswordAndPasswordHint(): BEGIN")
+
+        var ret: Bool = false
+        
+        if writePasswordToKeychain(password: password) {
+            
+            if savePasswordHint() {
+                ret = true
+            } else {
+                ret = false
+                print("savePasswordAndPasswordHint(): could not save password hint")
+            }
+            
+        } else {
+            ret = false
+            print("savePasswordAndPasswordHint(): could not save password")
+        }
+        
+        print("savePasswordAndPasswordHint(): END")
+
+        return ret
+        
+    }
+    
     private func savePassword() -> Bool {
         
         print("savePassword(): BEGIN")
@@ -135,6 +230,39 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         print("savePassword(): END")
 
         return ret
+    }
+    
+    private func getPasswordHint() -> String {
+
+        print("getPasswordHint(): BEGIN")
+        
+        var pwh: String = ""
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "PasswordHint")
+        
+        do {
+            let results = try managedContext.fetch(fetchRequest)
+            print("getPasswordHint(): results: \(results.count)")
+            
+            if results.count != 0 {
+                
+                let match = results[0] as! NSManagedObject
+                pwh = match.value(forKey: "password_hint") as! String
+                print("getPasswordHint(): passwordHint \(pwh)")
+                
+            } else {
+                print("getPasswordHint(): no password record found")
+            }
+            
+        } catch let error as NSError {
+            print("getPasswordHint(): Could not fetch. \(error), \(error.userInfo)")
+        }
+        
+        print("getPasswordHint(): END")
+        
+        return pwh
+
     }
     
     
@@ -177,6 +305,78 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    private func readPasswordFromKeychain() -> String {
+        
+        let accountName: String = ""
+        var password: String = ""
+        
+        do {
+            let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName,
+                                                    account: accountName,
+                                                    accessGroup: KeychainConfiguration.accessGroup)
+            let keychainPassword = try passwordItem.readPassword()
+            password = keychainPassword
+            
+        } catch {
+            //fatalError("Error reading password from keychain - \(error)")
+            print("readPasswordFromKeychain: password not found in keychain")
+        }
+        
+        return password
+        
+    }
+    
+    private func writePasswordToKeychain(password: String) -> Bool {
+        
+        let accountName: String = ""
+        
+        if password == "" {
+            print("writePasswordToKeyChain: password cannot be empty")
+            return false
+        }
+        
+        // 5
+        do {
+            // This is a new account, create a new keychain item with the account name.
+            let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName,
+                                                    account: accountName,
+                                                    accessGroup: KeychainConfiguration.accessGroup)
+            
+            // Save the password for the new item.
+            try passwordItem.savePassword(password)
+            print("writePasswordToKeyChain: pasword saved to keychain")
+            return true
+        } catch {
+            //fatalError("Error updating keychain - \(error)")
+            print("writePasswordToKeyChain: Error updating keychain - \(error)")
+            return false
+        }
+        
+    }
+    
+    private func deletePasswordFromKeychain() -> Bool {
+        
+        let accountName: String = ""
+        
+        do {
+            let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName,
+                                                    account: accountName,
+                                                    accessGroup: KeychainConfiguration.accessGroup)
+            
+            try passwordItem.deleteItem()
+            
+            print("deletePasswordFromKeychain: password deleted from keychain")
+            
+            return true
+            
+        } catch {
+            //fatalError("Error updating keychain - \(error)")
+            print("deletePasswordFromKeychain: Error deleting frin keychain - \(error)")
+            return false
+        }
+        
+    }
+
     private func launch1stScreen() {
         
         //switching the screen
@@ -209,7 +409,13 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func deleteButton(_ sender: UIButton) {
         
+        if deletePasswordFromKeychain() {
+            print("password deleted from keychain")
+        } else {
+            print("password not deleted from keychain")
+        }
         
+        // delete from core data - old
         let managedContext = appDelegate.persistentContainer.viewContext
         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Password")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
@@ -222,12 +428,12 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
             passwordHint = ""
             passwordFound = false
             
-            setupLoginScreen()
-            
         } catch {
             print("Error while deleting from Password")
         }
-        
+
+        setupLoginScreen()
+
     }
     
     
@@ -244,6 +450,8 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
                 msgBox(title: "", text: "Must enter a password to continue")
             } else if confirmPW.isEmpty {
                 msgBox(title: "", text: "Must confirm password to continue")
+            } else if pwHint.isEmpty {
+                msgBox(title: "", text: "Must enter a password hint to continue")
             } else {
                 // need to confirm and save password to db
                 if pw == confirmPW {
@@ -251,7 +459,8 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
                     passwordHint = pwHint
                     
                     // save to db
-                    if savePassword() {
+                    //if savePassword() {
+                        if savePasswordAndPasswordHint() {
                         // password saved
                         launch1stScreen()
                     } else {

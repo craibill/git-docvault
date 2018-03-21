@@ -8,14 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		4615E753203DE84000618407 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E752203DE84000618407 /* AppDelegate.swift */; };
-		4615E755203DE84100618407 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E754203DE84100618407 /* ViewController.swift */; };
 		4615E758203DE84100618407 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4615E756203DE84100618407 /* Main.storyboard */; };
 		4615E75B203DE84100618407 /* SimpleList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4615E759203DE84100618407 /* SimpleList.xcdatamodeld */; };
 		4615E75D203DE84100618407 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4615E75C203DE84100618407 /* Assets.xcassets */; };
 		4615E760203DE84100618407 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4615E75E203DE84100618407 /* LaunchScreen.storyboard */; };
 		4615E76B203DE84200618407 /* SimpleListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E76A203DE84200618407 /* SimpleListTests.swift */; };
-		4615E77A203E213D00618407 /* PersonClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E779203E213D00618407 /* PersonClass.swift */; };
 		4615E77E203F5BF400618407 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4615E77D203F5BF400618407 /* ItemTableViewCell.swift */; };
+		468484B82062AC0400A74082 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468484B72062AC0400A74082 /* KeychainPasswordItem.swift */; };
 		46E46428203F605E00363278 /* ItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E46427203F605E00363278 /* ItemTableViewController.swift */; };
 		46E4642A203F67AE00363278 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E46429203F67AE00363278 /* ItemViewController.swift */; };
 		46E4642C20407BEB00363278 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E4642B20407BEB00363278 /* Item.swift */; };
@@ -36,7 +35,6 @@
 /* Begin PBXFileReference section */
 		4615E74F203DE84000618407 /* DocVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DocVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4615E752203DE84000618407 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4615E754203DE84100618407 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4615E757203DE84100618407 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4615E75A203DE84100618407 /* SimpleList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleList.xcdatamodel; sourceTree = "<group>"; };
 		4615E75C203DE84100618407 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -45,8 +43,8 @@
 		4615E766203DE84200618407 /* SimpleListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4615E76A203DE84200618407 /* SimpleListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListTests.swift; sourceTree = "<group>"; };
 		4615E76C203DE84200618407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4615E779203E213D00618407 /* PersonClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonClass.swift; sourceTree = "<group>"; };
 		4615E77D203F5BF400618407 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
+		468484B72062AC0400A74082 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		46E46427203F605E00363278 /* ItemTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewController.swift; sourceTree = "<group>"; };
 		46E46429203F67AE00363278 /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
 		46E4642B20407BEB00363278 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -94,11 +92,10 @@
 			isa = PBXGroup;
 			children = (
 				4615E752203DE84000618407 /* AppDelegate.swift */,
-				4615E754203DE84100618407 /* ViewController.swift */,
-				4615E779203E213D00618407 /* PersonClass.swift */,
 				46E4642B20407BEB00363278 /* Item.swift */,
 				46E46427203F605E00363278 /* ItemTableViewController.swift */,
 				46E4642F2045CE5600363278 /* LoginScreenViewController.swift */,
+				468484B72062AC0400A74082 /* KeychainPasswordItem.swift */,
 				4615E77D203F5BF400618407 /* ItemTableViewCell.swift */,
 				46E46429203F67AE00363278 /* ItemViewController.swift */,
 				4615E756203DE84100618407 /* Main.storyboard */,
@@ -224,12 +221,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				46E4642A203F67AE00363278 /* ItemViewController.swift in Sources */,
-				4615E77A203E213D00618407 /* PersonClass.swift in Sources */,
 				4615E75B203DE84100618407 /* SimpleList.xcdatamodeld in Sources */,
 				4615E77E203F5BF400618407 /* ItemTableViewCell.swift in Sources */,
 				46E4642C20407BEB00363278 /* Item.swift in Sources */,
-				4615E755203DE84100618407 /* ViewController.swift in Sources */,
 				46E46428203F605E00363278 /* ItemTableViewController.swift in Sources */,
+				468484B82062AC0400A74082 /* KeychainPasswordItem.swift in Sources */,
 				46E4642E2044D33000363278 /* ZoomImageViewController.swift in Sources */,
 				46E464302045CE5600363278 /* LoginScreenViewController.swift in Sources */,
 				4615E753203DE84000618407 /* AppDelegate.swift in Sources */,

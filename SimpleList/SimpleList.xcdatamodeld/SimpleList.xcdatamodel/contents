@@ -13,9 +13,13 @@
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="password_hint" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="PasswordHint" representedClassName="PasswordHint" syncable="YES" codeGenerationType="class">
+        <attribute name="password_hint" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="FullSizeImages" positionX="-63" positionY="9" width="128" height="75"/>
         <element name="Items" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="Password" positionX="-63" positionY="9" width="128" height="75"/>
+        <element name="PasswordHint" positionX="-63" positionY="9" width="128" height="60"/>
     </elements>
 </model>
