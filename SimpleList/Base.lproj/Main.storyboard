@@ -168,10 +168,10 @@
             </objects>
             <point key="canvasLocation" x="1928.8" y="114.69265367316342"/>
         </scene>
-        <!--Zoom Image View Controller-->
+        <!--Zoom and Pan-->
         <scene sceneID="eWb-dB-Taq">
             <objects>
-                <viewController id="L7d-eo-URe" customClass="ZoomImageViewController" customModule="DocVault" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Zoom and Pan" id="L7d-eo-URe" customClass="ZoomImageViewController" customModule="DocVault" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="p7h-7J-wke">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
