@@ -10,43 +10,77 @@ import UIKit
 import CoreData
 
 //Keychain Configuration
-struct KeychainConfiguration {
-    static let serviceName = "DocVault"
-    static let accessGroup: String? = nil
-}
-
+//struct KeychainConfiguration {
+//    static let serviceName = "DocVault"
+//    static let accessGroup: String? = nil
+//}
+//
 class LoginScreenViewController: UIViewController, UITextFieldDelegate {
 
     var password: String = ""
     var passwordHint: String = ""
     var passwordFound: Bool = false
+    var usePassword: Bool = false
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
     @IBOutlet weak var passwordText: UITextField!
-    @IBOutlet weak var confirmPasswordText: UITextField!
     @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var passwordHintText: UITextField!
     @IBOutlet weak var viewHintButton: UIButton!
-    @IBOutlet weak var labelInstructions: UILabel!
-    @IBOutlet weak var loginButtonTopConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         passwordText.delegate = self
-        confirmPasswordText.delegate = self
-        passwordHintText.delegate = self
+        
+        passwordText.isHidden = true
+        loginButton.isHidden = true
+        viewHintButton.isHidden = true
+        
+        loginButton.layer.cornerRadius = 5
+        loginButton.layer.borderWidth = 1
+        loginButton.layer.borderColor = UIColor.blue.cgColor
         
         // Do any additional setup after loading the view.
+        
+        let upwd = getUsePassword()
+        setUsePassword(usePW: upwd)
+
+        if usePassword == true {
+
+            passwordText.isHidden = false
+            loginButton.isHidden = false
+            viewHintButton.isHidden = false
+
+            passwordText.isSelected = true
+            passwordText.becomeFirstResponder()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         
-        setupLoginScreen()
-        passwordText.text = ""
-        confirmPasswordText.text = ""
-        passwordHintText.text = ""
+        if usePassword == false {
+            // beginning with version 0.1, build 3, if user has not
+            // turned on use password, then skip the login screen altogether
+
+            // skip logging in just go to 1st screen
+            launch1stScreen()
+            
+        } else {
+            
+            // make the controls visible
+            passwordText.isHidden = false
+            loginButton.isHidden  = false
+            viewHintButton.isHidden = false
+
+            setupLoginScreen()
+            passwordText.text = ""
+
+            passwordText.becomeFirstResponder()
+
+        }
+
+        
         
         self.navigationController?.setToolbarHidden(true, animated: true)
     
@@ -59,16 +93,6 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     
 
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    /*
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -79,6 +103,41 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
      */
     
     @IBAction func unwindToLogin(segue: UIStoryboardSegue) {
+     
+        if let sourceViewController = segue.source as? ItemTableViewController {
+            
+            print("returned to login from ItemTableViewController")
+
+            usePassword = globalUsePassword
+            //setUsePassword(usePW: usePw)
+            
+        } else if let sourceViewController = segue.source as? SettingsScreenViewController {
+
+            print("returned to login from SettingsScreenViewController")
+
+            usePassword = globalUsePassword
+            //setUsePassword(usePW: usePw)
+
+        } else if let sourceViewController = segue.source as? ItemViewController {
+            print("returned to login from ItemViewController")
+
+            usePassword = globalUsePassword
+            //setUsePassword(usePW: usePw)
+
+        } else if let sourceViewController = segue.source as? ZoomImageViewController {
+            print("returned to login from ZoomImageViewController")
+
+            usePassword = globalUsePassword
+            //setUsePassword(usePW: usePw)
+
+        } else if let sourceViewController = segue.source as? OldPasswordViewController {
+            print("returned to login from OldPasswordViewController")
+
+            usePassword = globalUsePassword
+            //setUsePassword(usePW: usePw)
+
+        }
+
     }
 
     //MARK: Private Functions
@@ -99,42 +158,18 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
 
     private func setupLoginScreen () {
   
-//
-// Old
-//
-//        if getPassword() {
-//            confirmPasswordText.isHidden = true
-//            passwordHintText.isHidden = true
-//            viewHintButton.isHidden = false
-//            loginButton.setTitle("Login", for: .normal)
-//        } else {
-//            confirmPasswordText.isHidden = false
-//            passwordHintText.isHidden = false
-//            viewHintButton.isHidden = true
-//            loginButton.setTitle("Confirm", for: .normal)
-//        }
-        
-// New
         password = readPasswordFromKeychain()
         passwordHint = getPasswordHint()
         
         if password.isEmpty {
             
-            confirmPasswordText.isHidden = false
-            passwordHintText.isHidden = false
             viewHintButton.isHidden = true
             loginButton.setTitle("Confirm", for: .normal)
-            labelInstructions.isHidden = false
-            loginButtonTopConstraint.constant = 24
             
         } else {
 
-            confirmPasswordText.isHidden = true
-            passwordHintText.isHidden = true
             viewHintButton.isHidden = false
             loginButton.setTitle("Login", for: .normal)
-            labelInstructions.isHidden = true
-            loginButtonTopConstraint.constant = -72
         }
         
         
@@ -232,6 +267,84 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         return ret
     }
     
+    
+    private func getUsePassword() -> Bool {
+
+        print("getUsePassword(): BEGIN")
+        
+        // default to not using password
+        // user must opt in
+        var upw: Bool = false
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Settings")
+        
+        do {
+            let results = try managedContext.fetch(fetchRequest)
+            print("getUsePassword(): results: \(results.count)")
+            
+            if results.count != 0 {
+                
+                let match = results[0] as! NSManagedObject
+                upw = match.value(forKey: "use_password") as! Bool
+                print("getUsePassword(): use_password \(upw)")
+                
+            } else {
+                print("getUsePassword(): no use_password record found")
+                
+                // if not password record found, write in to core data
+                let r = saveUsePassword(usePW: upw)
+                
+                if r == true {
+                    print("succesfully wrote usePassword to core data")
+                } else {
+                    print("could not write usePassword to core data")
+                }
+            }
+            
+        } catch let error as NSError {
+            print("getUsePassword(): Could not fetch. \(error), \(error.userInfo)")
+        }
+        
+        print("getUsePassword(): END")
+        
+        return upw
+
+    }
+    
+    private func saveUsePassword(usePW: Bool) -> Bool {
+        
+        print("saveUsePassword(): BEGIN")
+        
+        var ret: Bool = false
+        
+        // 1
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        // save to Items table
+        // 2
+        let entity = NSEntityDescription.entity(forEntityName: "Settings", in: managedContext)!
+        
+        let thisItem = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        // 3
+        thisItem.setValue(usePW, forKeyPath: "use_password")
+        
+        // 4
+        do {
+            try managedContext.save()
+            ret = true
+        } catch let error as NSError {
+            print("saveUsePassword(): Could not save. \(error), \(error.userInfo)")
+            ret = false
+        }
+        
+        print("saveUsePassword(): END")
+        
+        return ret
+        
+    }
+
     private func getPasswordHint() -> String {
 
         print("getPasswordHint(): BEGIN")
@@ -305,6 +418,7 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    /*
     private func readPasswordFromKeychain() -> String {
         
         let accountName: String = ""
@@ -376,13 +490,22 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
         }
         
     }
+ 
+ */
+    
 
     private func launch1stScreen() {
         
         //switching the screen
-        let profileViewController = self.storyboard?.instantiateViewController(withIdentifier:  "ItemTableViewController") as! ItemTableViewController
+        let itemTblViewCtrlr = self.storyboard?.instantiateViewController(withIdentifier:  "ItemTableViewController") as! ItemTableViewController
         
-        self.navigationController?.pushViewController(profileViewController, animated: true)
+        itemTblViewCtrlr.usePassword = usePassword
+        
+        if usePassword {
+            self.navigationController?.pushViewController(itemTblViewCtrlr, animated: true)
+        } else {
+            self.navigationController?.pushViewController(itemTblViewCtrlr, animated: false)
+        }
         
         //self.textPassword.text = ""
         //self.textConfirmPassword.text = ""
@@ -393,6 +516,14 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: Actions
+    
+    
+    private func setUsePassword(usePW: Bool) {
+        
+        usePassword = usePW
+        globalUsePassword = usePW
+        
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
@@ -440,47 +571,13 @@ class LoginScreenViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginButton(_ sender: UIButton) {
         
         let pw = passwordText.text ?? ""
-        let confirmPW = confirmPasswordText.text ?? ""
-        let pwHint = passwordHintText.text ?? ""
         
-        if password.isEmpty {
-            
-            // pw and confirmPW cannot be empty
-            if pw.isEmpty {
-                msgBox(title: "", text: "Must enter a password to continue")
-            } else if confirmPW.isEmpty {
-                msgBox(title: "", text: "Must confirm password to continue")
-            } else if pwHint.isEmpty {
-                msgBox(title: "", text: "Must enter a password hint to continue")
-            } else {
-                // need to confirm and save password to db
-                if pw == confirmPW {
-                    password = pw
-                    passwordHint = pwHint
-                    
-                    // save to db
-                    //if savePassword() {
-                        if savePasswordAndPasswordHint() {
-                        // password saved
-                        launch1stScreen()
-                    } else {
-                        // something went wrong saving password
-                        fatalError("Error saving password")
-                    }
-                } else {
-                    // passwords don't match
-                    msgBox(title: "", text: "Passwords do not match!")
-                }
-
-            }
-            
+        
+        // need to compare password entered to saved password
+        if pw == password {
+            launch1stScreen()
         } else {
-            // need to compare password entered to saved password
-            if pw == password {
-                launch1stScreen()
-            } else {
-                msgBox(title: "", text: "Incorrect password!")
-            }
+            msgBox(title: "", text: "Incorrect password!")
         }
         
         self.view.endEditing(true)

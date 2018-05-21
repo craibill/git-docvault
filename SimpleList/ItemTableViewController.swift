@@ -11,8 +11,12 @@ import CoreData
 
 class ItemTableViewController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating {
 
+    
+    @IBOutlet weak var buttonLogout: UIBarButtonItem!
+    
     var itemsdb: [NSManagedObject] = []
-
+    var usePassword: Bool?
+    
     //var currentIndexPathRow = 0
     //var currentFullSizeImage: NSManagedObject?
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -34,11 +38,26 @@ class ItemTableViewController: UITableViewController, UISearchBarDelegate, UISea
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppDidBecomeActive),
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
+            object: nil)
+
 
     }
 
     override func viewWillAppear(_ animated: Bool) {
-  
+
+        if usePassword == true {
+            buttonLogout.title = "Logout"
+            buttonLogout.isEnabled = true
+        } else {
+            buttonLogout.title = ""
+            buttonLogout.isEnabled = false
+        }
+
         // show the navigation bar and searchbar when this view displays
         self.navigationController?.setToolbarHidden(false, animated: animated)
         searchController.searchBar.isHidden = false
@@ -230,6 +249,11 @@ class ItemTableViewController: UITableViewController, UISearchBarDelegate, UISea
             //os_log("hopefully return to login", log: OSLog.default, type: .debug)
             searchController.dismiss(animated: true, completion: nil)
             searchController.searchBar.isHidden = true
+        
+        case "Settings":
+            if let index = self.tableView.indexPathForSelectedRow{
+                self.tableView.deselectRow(at: index, animated: true)
+            }
             
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier)")
@@ -240,12 +264,38 @@ class ItemTableViewController: UITableViewController, UISearchBarDelegate, UISea
 
     //MARK: Actions
 
+    @IBAction func settingsButton(_ sender: UIBarButtonItem) {
+        
+        
+    }
+    
     @IBAction func logoutButton(_ sender: UIBarButtonItem) {
         
         self.performSegue(withIdentifier: "unwindToLogin", sender: self)
 
     }
     
+    @IBAction func unwindToItemListFromSettings(sender: UIStoryboardSegue) {
+    
+        if let sourceViewController = sender.source as? SettingsScreenViewController,
+            let usePw = sourceViewController.usePassword {
+            
+            //usePassword = usePw
+            setUsePassword(usePW: usePw)
+            
+            if usePw == true {
+                buttonLogout.isEnabled = true
+                buttonLogout.title = "Logout"
+            } else {
+                buttonLogout.isEnabled = false
+                buttonLogout.title = ""
+            }
+        }
+
+        
+    }
+    
+        
     @IBAction func unwindToItemList(sender: UIStoryboardSegue) {
         
         print("BEGIN: unwindToItemList")
@@ -297,6 +347,20 @@ class ItemTableViewController: UITableViewController, UISearchBarDelegate, UISea
     }
     
     //MARK: Private Functions
+    
+    @objc private func handleAppDidBecomeActive() {
+        
+        if globalUsePassword == true {
+            self.performSegue(withIdentifier: "unwindToLogin", sender: self)
+        }
+    }
+
+    private func setUsePassword(usePW: Bool) {
+        
+        usePassword = usePW
+        globalUsePassword = usePW
+        
+    }
     
     private func getAllItemsData(searchText: String) {
         

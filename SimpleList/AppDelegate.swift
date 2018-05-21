@@ -32,11 +32,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
-        if let navigationController = self.window?.rootViewController as? UINavigationController {
-            navigationController.popToRootViewController(animated: false)
+        /*
+        if globalUsePassword {
             
+            print("globalUsePassword = \(globalUsePassword), allowed to lock app")
+
+            
+            
+            //self.window.navigationController?.popToViewController(vc!, animated: true)
+            
+//            if let navigationController = self.window?.rootViewController as? UINavigationController {
+//                navigationController.popToRootViewController(animated: false)
+//            }
+
+        } else {
+            print("globalUsePassword = \(globalUsePassword),  not allowed to lock app")
         }
+        */
         
     }
 

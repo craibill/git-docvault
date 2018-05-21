@@ -54,6 +54,15 @@ class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         textDescription.delegate = self
         
         navigationController?.setToolbarHidden(false, animated: true)
+        
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppDidBecomeActive),
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
+            object: nil)
+        
+
     }
 
   override func didReceiveMemoryWarning() {
@@ -227,7 +236,13 @@ class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     //MARK: Private Functions
-    
+    @objc private func handleAppDidBecomeActive() {
+        
+        if globalUsePassword == true {
+            self.performSegue(withIdentifier: "ReturnToLoginFromItem", sender: self)
+        }
+    }
+
     private func updateSaveButtonState() {
         
         if textDescription.text != item?.description {

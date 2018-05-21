@@ -38,6 +38,13 @@ class ZoomImageViewController: UIViewController, UIScrollViewDelegate, UINavigat
         // A zoom scale greater than one shows the content zoomed in
         scrollViewObject.zoomScale = 0.5 //0.25 //0.5
         updateMinZoomScaleForSize(view.bounds.size)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppDidBecomeActive),
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
+            object: nil)
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,6 +126,15 @@ class ZoomImageViewController: UIViewController, UIScrollViewDelegate, UINavigat
         
     }
     
+    // MARK: Private Functions
+    
+    @objc private func handleAppDidBecomeActive() {
+        
+        if globalUsePassword == true {
+            self.performSegue(withIdentifier: "ReturnToLoginFromZoom", sender: self)
+        }
+    }
+
     private func centerImage() {
         
         
