@@ -8,21 +8,25 @@
 
 import UIKit
 import os.log
+import MessageUI
+import Photos
+
 
 struct viewMode {
     static let addMode = 1
     static let editMode = 2
 }
 
-class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
+    
 
 
     //MARK: Properties
     
-    @IBOutlet weak var labelDescription: UILabel!
     @IBOutlet weak var textDescription: UITextField!
     @IBOutlet weak var imageFullSizeImage: UIImageView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var sendButton: UIBarButtonItem!
     
     
     var item: ItemClass?
@@ -48,8 +52,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         }
         
         saveButton.isEnabled = false
-        
-        
+                
         // Do any additional setup after loading the view.
         textDescription.delegate = self
         
@@ -199,7 +202,83 @@ class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         dismiss(animated: true, completion: nil)
     }
     
+    // MARK: Protocols
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        
+        self.dismiss(animated: true, completion: nil)
+
+    }
+
+//    func mailComposeController(controller: MFMailComposeViewController,
+//                               didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+//
+//        //controller.dismiss(animated: true, completion: nil)
+//        self.dismiss(animated: true, completion: nil)
+//    }
+
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
+        
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: Targets
+    
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        
+        if error == nil {
+            let ac = UIAlertController(title: "Saved!", message: "Image saved to your photos.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(ac, animated: true, completion: nil)
+        } else {
+            let ac = UIAlertController(title: "Save error", message: error?.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(ac, animated: true, completion: nil)
+        }
+    }
+    
     //MARK: Actions
+    
+    @IBAction func buttonSend(_ sender: UIBarButtonItem) {
+        
+        let alertController = UIAlertController(title: "Share Image", message: "What would you like to do?", preferredStyle: .actionSheet)
+        
+
+        let messageButton = UIAlertAction(title: "Message", style: .default, handler: { (action) -> Void in
+            
+            print("Send Message button tapped")
+            self.sendMessage()
+            
+        })
+        
+        let  emailButton = UIAlertAction(title: "Email", style: .default, handler: { (action) -> Void in
+            
+            print("Email button tapped")
+            self.sendEmail()
+            
+        })
+
+        let  saveButton = UIAlertAction(title: "Save to camera roll", style: .default, handler: { (action) -> Void in
+            
+            print("Save to camera toll button tapped")
+            self.saveToCameraRoll()
+            
+        })
+
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
+            print("Cancel button tapped")
+        })
+        
+        
+        alertController.addAction(messageButton)
+        alertController.addAction(emailButton)
+        alertController.addAction(saveButton)
+        alertController.addAction(cancelButton)
+        
+        self.navigationController!.present(alertController, animated: true, completion: nil)
+        
+    }
+    
     
     @IBAction func showCamera(_ sender: UIBarButtonItem) {
         
@@ -236,6 +315,108 @@ class ItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     //MARK: Private Functions
+
+    private func sendMessage() {
+        
+        if (MFMessageComposeViewController.canSendText()) {
+            let controller = MFMessageComposeViewController()
+            controller.body = "Image sent via DocVault"
+            //controller.recipients = [phoneNumber.text]
+            controller.messageComposeDelegate = self
+            
+            //Add Image as Attachment
+            
+            
+            if MFMessageComposeViewController.canSendAttachments() {
+                let imageData = UIImageJPEGRepresentation(imageFullSizeImage.image!, 1.0)
+                controller.addAttachmentData(imageData!, typeIdentifier: "image/jpg", filename: "image.jpg")
+            }
+            
+            self.present(controller, animated: true, completion: nil)
+        }
+
+    }
+    
+    private func sendEmail() {
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            
+            mail.mailComposeDelegate = self
+            
+            //mail.setCcRecipients(["yyyy@xxx.com"])
+            mail.setSubject("Image sent via DocVault")
+            mail.setMessageBody("Here is your image", isHTML: false)
+            
+            //let imageData: NSData = UIImagePNGRepresentation(imageFullSizeImage.image!)! as NSData
+            let imageData = UIImageJPEGRepresentation(imageFullSizeImage.image!, 1.0)
+            
+            //mail.addAttachmentData(imageData as Data, mimeType: "image/png", fileName: "imageName.png")
+            mail.addAttachmentData(imageData!, mimeType: "image/png", fileName: "image.jpg")
+            
+            self.present(mail, animated: true, completion: nil)
+        }
+
+    }
+    
+    private func saveToCameraRoll() {
+        
+        let pickedImage = item?.image
+        
+        // Get the current authorization state.
+        let status = PHPhotoLibrary.authorizationStatus()
+        
+        if (status == PHAuthorizationStatus.authorized) {
+            
+            // UIImageWriteToSavedPhotosAlbum(pickedImage!, nil, nil, nil)
+            UIImageWriteToSavedPhotosAlbum(pickedImage!, self,
+                                           #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+            
+            
+        } else if (status == PHAuthorizationStatus.denied) {
+            
+            // Access has been denied.
+            msgBox(title: "Access Needed" , text: "Please allow DocVault access to Photos")
+            
+        } else if (status == PHAuthorizationStatus.notDetermined) {
+            
+            // Access has not been determined.
+            PHPhotoLibrary.requestAuthorization({ (newStatus) in
+                
+                if (newStatus == PHAuthorizationStatus.authorized) {
+                    
+                    UIImageWriteToSavedPhotosAlbum(pickedImage!, nil, nil, nil)
+                    
+                }
+                    
+                else {
+                    
+                    self.msgBox(title: "Access Needed" , text: "Please allow DocVault access to Photos")
+                    
+                }
+            })
+            
+            
+        } else if (status == PHAuthorizationStatus.restricted) {
+            // Restricted access - normally won't happen.
+        }
+        
+    }
+    
+    private func msgBox(title: String, text: String) {
+        
+        var msgTitle: String = "Message"
+        
+        if !title.isEmpty {
+            msgTitle = title
+        }
+        
+        let alert = UIAlertController(title: msgTitle, message: text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    
     @objc private func handleAppDidBecomeActive() {
         
         if globalUsePassword == true {

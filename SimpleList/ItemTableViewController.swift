@@ -366,7 +366,9 @@ class ItemTableViewController: UITableViewController, UISearchBarDelegate, UISea
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Items")
-        let sort = NSSortDescriptor(key: "item_description", ascending: true)
+        let sort = NSSortDescriptor(key: "item_description", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:)))
+        
+        
         fetchRequest.sortDescriptors = [sort]
 
         if !searchText.isEmpty {

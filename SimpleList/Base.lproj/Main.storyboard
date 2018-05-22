@@ -141,9 +141,16 @@
                                 <action selector="selectImage:" destination="VEU-AS-y8g" id="EET-oq-7Ka"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="WXh-gY-d4h"/>
                         <barButtonItem systemItem="camera" id="gJf-aa-pkD">
                             <connections>
                                 <action selector="showCamera:" destination="VEU-AS-y8g" id="mzN-95-msy"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="OhP-6x-dnS"/>
+                        <barButtonItem systemItem="action" id="fgu-8t-RoY">
+                            <connections>
+                                <action selector="buttonSend:" destination="VEU-AS-y8g" id="RKC-S6-ZTX"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -163,6 +170,7 @@
                     <connections>
                         <outlet property="imageFullSizeImage" destination="iAo-WW-hGT" id="sAx-hS-EXa"/>
                         <outlet property="saveButton" destination="04a-tw-QM4" id="dfM-Is-Vpy"/>
+                        <outlet property="sendButton" destination="fgu-8t-RoY" id="sYK-M8-O5i"/>
                         <outlet property="textDescription" destination="bNm-bJ-j2O" id="VFK-Qi-cKg"/>
                         <segue destination="KQ5-JK-uSs" kind="unwind" identifier="ReturnToLoginFromItem" unwindAction="unwindToLoginWithSegue:" id="b27-uV-Wqc"/>
                     </connections>
